@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.naphaso.alice" />
+
+    <bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:config.properties" />
+    </bean>
+
+    <bean id="emailWatcher" class="com.naphaso.alice.EmailWatcher" />
+
+    <bean id="newMessageListener" class="com.naphaso.alice.NewMessageListenerImpl" />
+    <bean id="emailSender" class="com.naphaso.alice.EmailSender" />
+
+    <bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="3" />
+        <property name="maxPoolSize" value="10" />
+        <property name="threadNamePrefix" value="ThreadPool-" />
+    </bean>
+
+    <bean id="xmppClient" class="com.naphaso.alice.XMPPClient" />
+    <bean id="xmppMessageListener" class="com.naphaso.alice.XMPPMessageListenerImpl" />
+
+    <!--bean id="testCommand" class="com.naphaso.alice.commands.TestCommand" /-->
+    <bean class="com.naphaso.alice.annotation.CommandAnnotationBeanPostProcessor" />
+
+    <bean id="scriptService" class="com.naphaso.alice.scripting.ScriptService" />
+
+    <import resource="classpath:database.xml" />
+</beans>
